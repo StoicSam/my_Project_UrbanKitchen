@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food App</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 500px;
+    }
+  </style>
+   <header class="main-header">
+
+       
+    <div class="logo">
+        <img src="UrbanKitchen - Copy.png" alt="logo" height="50" width="150">
+    </div>
+
+    <nav class="main-nav">
+      <a href="urban.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="#vendors">Vendors</a>
+      <a href="#cart">Cart</a>
+      <a href="#track">Track Order</a>
+      <a href="#rate">Rate Us</a>
+    </nav>
+  </header>
+</head>
+<body>
+
+     <!--<div id="authOverlay" class="auth-overlay">
+        <div class="auth-box">
+          <h2 id="authTitle">Sign In to UyoEats</h2>
+      
+          <form id="authForm">
+            <input type="email" placeholder="Email" required>
+            <input type="password" placeholder="Password" required>
+            <div id="nameField" style="display: none;">
+              <input type="text" placeholder="Full Name">
+            </div>
+            <button type="submit">Continue</button>
+          </form>
+      
+          <div class="auth-links">
+            <a href="#" id="toggleAuth">Don't have an account? Sign Up</a><br>
+            <a href="#">Forgot Password?</a>
+          </div>
+        </div>
+      </div> -->
+      
+      
+    </head>
+   
+
+
+  <!-- Home -->
+  <section id="home">
+        <section class="hero"> 
+         <!--<h2>Live Map</h2>-->
+
+
+<div id="map">  <div class="map-placeholder">Loading map...</div>
+  <div class="map-overlay">
+    <h3>Find Your Nearest Vendors</h3>
+    <p>Click on the map to drop a pin or use your location.</p>
+  </div>
+</div>
+
+
+<div class="map-controls">
+  <button onclick="useMyLocation()">📍 Use My Location</button>
+</div>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- Leaflet Geosearch JS -->
+<script src="https://unpkg.com/leaflet-geosearch@3.0.0/dist/bundle.min.js"></script>
+
+<script>
+const map = L.map('map').setView([5.038963, 7.912843], 13); // Default center at Uyo
+
+// Base map layer
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+}).addTo(map);
+
+// Marker for default center
+L.marker([5.038963, 7.912843]).addTo(map)
+  .bindPopup('Welcome to Uyo!')
+  .openPopup();
+
+let userMarker;
+
+// Function to handle geolocation
+function useMyLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      // Move map to user location
+      map.setView([lat, lng], 14);
+
+      // Remove old marker if exists
+      if (userMarker) {
+        map.removeLayer(userMarker);
+      }
+
+      // Add new marker
+      userMarker = L.marker([lat, lng]).addTo(map)
+        .bindPopup("You are here!")
+        .openPopup();
+    }, function(error) {
+      alert("Location access denied or unavailable.");
+      console.error(error.message);
+    }, {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    });
+  } else {
+    alert("Geolocation is not supported by your browser.");
+  }
+}
+
+// Allow users to click to drop pin
+map.on('click', function(e) {
+  const { lat, lng } = e.latlng;
+
+  if (userMarker) {
+    map.removeLayer(userMarker);
+  }
+
+  userMarker = L.marker([lat, lng]).addTo(map)
+    .bindPopup("You selected this location.")
+    .openPopup();
+});
+
+// Add a search control (OpenStreetMap geocoding)
+const search = new window.GeoSearch.GeoSearchControl({
+  provider: new window.GeoSearch.OpenStreetMapProvider(),
+  style: 'bar',
+  autoComplete: true,
+  autoCompleteDelay: 250,
+  showMarker: true,
+  retainZoomLevel: false,
+  animateZoom: true,
+  keepResult: true
+});
+
+map.addControl(search);
+</script>
+        <div class="hero-content">
+            <br>
+        <h1><span class="glow-highlight">Uyo Urban Kitchen</span></h1>
+        <p><span class=""></span></p>
+      </div>
+    </div>
+    <header>
+        <h2 style="text-align: center;">Order delicious food nearest to you from your favorite vendors and have it delivered to your door.</h2>
+      <input type="text" placeholder="Search for food or vendor">
+    </header>
+  </section>
+   
+    <div class="home-content">
+      <main>
+        <h3 style="text-align: center;">Featured Vendors</h3>
+        <div class="vendor-list">
+          <div class="vendor">
+            <img src="chrunchies.jpeg" alt="Crunchies Logo">
+            <h4>Crunchies</h4>
+            <p>Taste the Crunch!</p>
+          </div>
+          <div class="vendor">
+            <img src="aLacart.jpeg" alt="aLaCart Logo">
+            <h4>aLaCart</h4>
+            <p>Meals your way.</p>
+          </div>
+          <div class="vendor">
+            <img src="logo-placeholder.png" alt="Beton Cooks Logo">
+            <h4>Beton Cooks</h4>
+            <p>Deliciously done right.</p>
+          </div>
+          <div class="vendor">
+            <img src="logo-placeholder.png" alt="Cherries Logo">
+            <h4>Cherries</h4>
+            <p>Sweet bites, big smiles.</p>
+          </div>
+          <div class="vendor">
+            <img src="logo-placeholder.png" alt="Foodamental Logo">
+            <h4>Foodamental</h4>
+            <p>Eat smart, live better.</p>
+          </div>
+          <div class="vendor">
+            <img src="logo-placeholder.png" alt="Kilimanjaro Logo">
+            <h4>Kilimanjaro</h4>
+            <p>A taste above the rest.</p>
+          </div>
+          <div class="vendor">
+            <img src="logo-placeholder.png" alt="Tantalizers Logo">
+            <h4>Tantalizers</h4>
+            <p>Tantalizing your tastebuds.</p>
+          </div>
+          <div class="vendor">
+            <img src="logo-placeholder.png" alt="De Choice Logo">
+            <h4>De Choice</h4>
+            <p>Your everyday choice.</p>
+          </div>
+          <div class="vendor">
+            <img src="logo-placeholder.png" alt="Cedar Court Logo">
+            <h4>Cedar Court</h4>
+            <p>Refined dining redefined.</p>
+          </div>
+          <div class="vendor">
+            <img src="logo-placeholder.png" alt="ChopStop Logo">
+            <h4>ChopStop</h4>
+            <p>Stop. Eat. Smile.</p>
+          </div>
+          <div class="vendor">
+            <img src="logo-placeholder.png" alt="Pepperoni Foods Logo">
+            <h4>Pepperoni Foods</h4>
+            <p>Full of flavour.</p>
+          </div>
+          <div class="vendor">
+            <img src="logo-placeholder.png" alt="Life Delicacies Logo">
+            <h4>Life Delicacies</h4>
+            <p>Savor every moment.</p>
+          </div>
+          <div class="vendor">
+            <img src="logo-placeholder.png" alt="Pyramid Lounge Logo">
+            <h4>Pyramid Lounge</h4>
+            <p>Elevate your cravings.</p>
+          </div>
+          <div class="vendor">
+            <img src="logo-placeholder.png" alt="Pepperoni Foods Logo">
+            <h4>Pepperoni Foods</h4>
+            <p>Full of flavour.</p>
+          </div>
+          <div class="vendor">
+            <img src="logo-placeholder.png" alt="Life Delicacies Logo">
+            <h4>Life Delicacies</h4>
+            <p>Savor every moment.</p> 
+        </div>
+      </div>
+        <h3 style="text-align: center;">Categories</h3>
+        <div class="category-list"></div>
+      </main>
+    </div>
+  </section>
+
+  <section class="menu-section" id="menu">
+    <h2>Menu</h2>
+    <div class="menu-category">
+      <h4 style="text-align: center;">Traditional Dishes - Swallows</h4>
+      <p><em>Experience the rich flavors of our traditional dishes, crafted with authentic ingredients and spices.</em></p>
+      <div class="menu-items">
+        <div class="menu-item">
+          <h3>Egusi Soup</h3>
+          <p span class="glow-on-hover">Ground melon seeds soup with assorted meat. ₦1,200</p>
+        </div>
+       
+        <div class="menu-item">
+          <h3>Okra Soup</h3>
+          <p span class="glow-on-hover">Fresh okra soup with assorted fish and meat. ₦1,300</p>
+        </div>
+        <div class="menu-item">
+          <h3>Afang Soup</h3>
+          <p span class="glow-on-hover">Rich soup with periwinkle & stockfish. ₦1,500</p>
+        </div>
+        <div class="menu-item">
+          <h3>Edikang Ikong</h3>
+          <p span class="glow-on-hover">Flavored vegetable delight with meat & pomo. ₦1,700</p>
+        </div>
+        <div class="menu-item">
+          <h3>White Soup</h3>
+          <p span class="glow-on-hover">Traditional white soup with assorted goat meat.  ₦2,500</p>
+          </div> 
+        <br>
+    </div>
+
+    <div class="menu-category">
+      <h4>Intercontinental Dishes</h4>
+      <p><em>Savor the taste of our Intercontinental delicacies, made with love and tradition.</em></p>
+      <div class="menu-items">
+
+      
+      <div class="menu-item">
+        <h3>Fried Rice & Chicken</h3>
+        <p span class="glow-on-hover">Spiced rice served with grilled spicy chicken. ₦2,000</p>
+      </div>
+      <div class="menu-item">
+        <h3>Shawarma</h3>
+        <p span class="glow-on-hover">Beef/Chicken wrap with hot sauce. ₦1,200</p>
+      </div>
+      <div class="menu-item">
+        <h3>Moi Moi</h3>
+        <p span class="glow-on-hover">Steamed bean pudding with pepper sauce. ₦800</p>
+        </div>
+        <div class="menu-item">
+        <h3>Jollof Rice</h3>
+        <p span class="glow-on-hover">Classic Nigerian rice with spicy tomato sauce. ₦1,500</p>
+        </div>
+        <div class="menu-item">
+        <h3>Peppered Goat Meat</h3>
+        <p span class="glow-on-hover">Spicy goat meat cooked to perfection. ₦1,800</p>
+        </div>
+      <div class="menu-item">
+        <h3>Catfish Pepper Soup</h3>
+        <p span class="glow-on-hover">Spicy catfish soup with assorted spices. ₦1,200</p>
+        </div>
+        <div class="menu-item">
+        <h3>Plantain Chips</h3>
+        <p span class="glow-on-hover">Crispy fried plantain chips with pepper sauce. ₦500</p>
+        </div>
+        <div class="menu-item">
+          <h3>Ofada Rice & Ayamase Sauce</h3>
+          <p span class="glow-on-hover">Local rice served with spicy green pepper sauce. ₦1,800</p>
+        </div>
+       
+
+    </div>
+  </section>
+
+  <!-- Vendors -->
+  <section id="vendors">
+    <h2 style="text-align: center;">Selected Vendors</h2>
+    <div class="menu-items"></div>
+  </section>
+
+  <!-- Cart -->
+  <section id="cart">
+    <h2 style="text-align: center;">Cart</h2>
+    <div class="cart-items"></div>
+    <div class="total">
+      <p>Total: <span id="cart-total">N0.00</span></p>
+      <button id="place-order" style="align-items: center;">Place Order</button>
+    </div>
+  </section>
+
+  <!-- Delivery -->
+  <section id="delivery">
+    <h2>Delivery Details</h2>
+    <input type="text" placeholder="Delivery Address">
+    <br>
+    <h3>Payment Method</h3>
+    <p>Choose your preferred payment method:</p>
+    <select>
+      <option>Card</option>
+      <option>Transfer</option>
+      <option>USSD</option>
+    </select>
+    <br>
+    <button>Confirm Order</button>
+  </section>
+
+  <!-- Track Order -->
+  <section id="track">
+    <h2>Track Order</h2>
+    <div class="tracker">
+      <p>Order Placed → Processing → Picked Up → On the Way</p>
+    </div>
+    <div class="map-placeholder">[Map View]</div>
+  </section>
+
+  <!-- Rate Order -->
+  <section id="rate">
+    <h2>Rate Order</h2>
+    <div class="stars">
+      <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+    </div>
+    <textarea placeholder="Write a review..."></textarea>
+    <br>
+    <button>Submit</button>
+  </section>
+
+   <!-- Splash Screen -->
+   <section id="splash">
+    <div class="center">
+        <div id="Screen" class="splash-screen">
+            <img src="UrbanKitchen.png" alt="logo" height="150" width="150">
+            <p>Loading your meal...</p>
+          </div>
+       </section>
+
+       <footer class="site-footer">
+        <div class="footer-content">
+          <p>&copy; 2025 Urban Kitchen. All rights reserved.</p>
+          <p>Contact: <a href="mailto:support@urbankitchen.com">support@urbankitchen.com</a></p>
+          <div class="footer-social">
+            <a href="#">Facebook</a> |
+            <a href="#">Instagram</a> |
+            <a href="#">Twitter</a>
+          </div>
+        </div>
+      </footer>
+
+  <a href="#home">Way Up</a>
+
+
+  <script src="app.js"></script>
+  
+</body>
+</html>
